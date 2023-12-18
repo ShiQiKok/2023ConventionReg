@@ -9,6 +9,10 @@
     "routes": [
       { "src": "/(.*)", 
       "dest": "convention/wsgi.py" }
+    ],
+    "rewrites":[
+      { "source": "/(.*)", 
+      "destination": "/" }
     ]
   }
   
