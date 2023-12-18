@@ -1,0 +1,13 @@
+{
+    "version": 1,
+    "builds": [
+      {
+        "src": "convention/wsgi.py", 
+        "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      { "src": "/(.*)", "dest": "convention/wsgi.py" }
+    ]
+  }
+  

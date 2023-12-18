@@ -1,35 +1,21 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+import pandas as pd
 
 # Create your views here.
 def index(request):
-
-
-
-    load_sheet()
-
-
+    excel_file_path = "./Registration Data.xlsx"
+    df = pd.read_excel(excel_file_path)
+    church_df = pd.read_excel(excel_file_path, sheet_name="church")
+    churches = church_df.iloc[:, 0].to_list()
+    names = df.iloc[:, 4].to_list()
     template = loader.get_template("home/index.html")
-    return HttpResponse(template.render())
+    
+    context = {
+        'churches': churches,
+        'participants': names
+    }
 
+    return render(request, "home/index.html", context)
 
-def load_sheet():
-   
-    # Set up credentials
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name(".\convention-registration-0dc415e4d876.json", scope)
-    client = gspread.authorize(creds)
-
-    # Open the Google Sheet using its title
-    sheet_title = "Registration - Name Card List"
-    worksheet = client.open(sheet_title).sheet1  # You can replace "sheet1" with the name of your specific worksheet
-
-    # Get all values from the worksheet
-    all_values = worksheet.get_all_values()
-
-    # Print the values
-    for row in all_values:
-        print(row)
